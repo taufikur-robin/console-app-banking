@@ -4,7 +4,7 @@ public class Account
     public static decimal Total = 0;
     public static List<string> TransactionHistory = new List<string>();
 
-	static void Main(string[] args)
+    static void Main(string[] args)
 	{
         while (true) 
         {
@@ -29,8 +29,8 @@ public class Account
             {
             break;
             }
-        } 
-	}
+        }
+    }
 
     public static void Deposit(decimal amount) 
     {
