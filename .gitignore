@@ -1,3 +1,5 @@
-/bin
-/obj
+/Banking/bin
+/Banking/obj
+/BankingTest/bin
+/BankingTest/obj
 .DS_Store
