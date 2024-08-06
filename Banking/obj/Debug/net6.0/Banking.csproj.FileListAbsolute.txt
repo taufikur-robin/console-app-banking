@@ -1,0 +1,15 @@
+/Users/taufikur.robin/Desktop/banking-app/Banking/bin/Debug/net6.0/Banking
+/Users/taufikur.robin/Desktop/banking-app/Banking/bin/Debug/net6.0/Banking.deps.json
+/Users/taufikur.robin/Desktop/banking-app/Banking/bin/Debug/net6.0/Banking.runtimeconfig.json
+/Users/taufikur.robin/Desktop/banking-app/Banking/bin/Debug/net6.0/Banking.dll
+/Users/taufikur.robin/Desktop/banking-app/Banking/bin/Debug/net6.0/Banking.pdb
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.csproj.AssemblyReference.cache
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.GeneratedMSBuildEditorConfig.editorconfig
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.AssemblyInfoInputs.cache
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.AssemblyInfo.cs
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.csproj.CoreCompileInputs.cache
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.dll
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/refint/Banking.dll
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.pdb
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/Banking.genruntimeconfig.cache
+/Users/taufikur.robin/Desktop/banking-app/Banking/obj/Debug/net6.0/ref/Banking.dll
