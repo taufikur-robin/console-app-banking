@@ -31,6 +31,7 @@ public class Account
             }
         } 
 	}
+
     public static void Deposit(decimal amount) 
     {
         Total += amount;
@@ -38,6 +39,7 @@ public class Account
         TransactionHistory.Add(transaction);
         Console.WriteLine(transaction);
     } 
+
     public static void Withdraw(decimal amount) 
     {
         if (amount > Total) {
@@ -51,6 +53,7 @@ public class Account
             Console.WriteLine(transaction);
         }
     }
+
     public static string GetStatement()
     {
         var statement = "Transaction History:\n";
@@ -61,6 +64,7 @@ public class Account
         statement += $"Current Balance: £{Total:F2}";
         return statement;
     }
+
     public static decimal GetAmountFromUser(string userInput)
     {
         decimal number;
@@ -78,6 +82,7 @@ public class Account
         }
         return number;
     }
+    
      public static string GetInputFromUser()
     {
         Console.WriteLine("What would you like to do?\n'Deposit' | 'Withdraw' | 'PrintStatement' | 'exit'");
