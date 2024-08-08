@@ -39,7 +39,7 @@ public class Tests
         Account.Deposit(100);
 
         // act
-        Account.Withdraw(150);
+        Account.WithdrawFunds(150);
 
         // assert
         var expectedOutput = "Deposited: £100.00, New Balance: £100.00\nInsufficient Funds\n";
@@ -55,7 +55,7 @@ public class Tests
         Account.Deposit(100);
 
         // act
-        Account.Withdraw(50);
+        Account.WithdrawFunds(50);
 
         // assert
         var expectedOutput = "Deposited: £100.00, New Balance: £100.00\nWithdrew: £50.00, New Balance: £50.00\n";
@@ -67,7 +67,7 @@ public class Tests
     {
         // arrange
         Account.Deposit(100m);
-        Account.Withdraw(50m);
+        Account.WithdrawFunds(50m);
 
         var expectedStatement = "Transaction History:\n" +
                                 "Deposited: £100.00, New Balance: £100.00\n" +
