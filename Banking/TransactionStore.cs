@@ -1,10 +1,28 @@
+using Banking.Data;
+using Banking.Models;
+
 namespace Banking;
 public class TransactionStore
 {
-    public List<Transaction> Transactions = new List<Transaction>();
-    public void AddTransaction(Transaction transaction)
+    private readonly BankingContext _context;
+
+    public TransactionStore(BankingContext context)
     {
-        transaction.id = Transactions.Count() + 1;
-        Transactions.Add(transaction);
+        _context = context;
+    }
+    
+    public List<TransactionModel> Transactions => _context.Transactions.ToList();
+    public void AddTransaction(Transaction transaction, int accountId)
+    {
+        var transactionModel = new TransactionModel
+        {
+            AccountId = accountId,
+            DateCreated = transaction.DateTime,
+            Operation = transaction.Operation,
+            Amount = transaction.Amount
+        };
+        
+        _context.Transactions.Add(transactionModel);
+        _context.SaveChanges();
     }
 }

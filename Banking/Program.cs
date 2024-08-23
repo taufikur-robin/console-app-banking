@@ -1,20 +1,27 @@
-﻿namespace Banking;
-public class Program
+﻿using Banking.Data;
+
+namespace Banking;
+public abstract class Program
 {
-    public const string Withdraw = "withdraw";
-    public const string Deposit = "withdraw";
-    public const string Statement = "statement";
-    public const string Exit = "exit";
-    static void Main(string[] args)
-	{
-        var transactionStore = new TransactionStore();
-        var account = new Account(transactionStore);
+    private const string Withdraw = "withdraw";
+    private const string Deposit = "deposit";
+    private const string Statement = "statement";
+    private const string Exit = "exit";
+
+    private static void Main(string[] args)
+    {
+        var context = new BankingContext();
+        var transactionStore = new TransactionStore(context);
+        var account = new Account(context, transactionStore);
+        
+        Console.WriteLine($"Current Account Balance: £{account.GetCurrentBalance:F2}");
+        
         while (true) 
         {
             var userInput = GetInputFromUser();
             if (userInput == Deposit || userInput == Withdraw)
             {
-                decimal amount = GetAmountFromUser(userInput);
+                var amount = GetAmountFromUser(userInput);
                 if (userInput == Deposit)
                 {
                     account.DepositFunds(amount);
@@ -30,18 +37,18 @@ public class Program
             }
             if (userInput == Exit)
             {
-            break;
+                break;
             }
         }
     }
 
-    public static decimal GetAmountFromUser(string userInput)
+    private static decimal GetAmountFromUser(string userInput)
     {
         decimal number;
         while (true) {
             Console.WriteLine($"Enter the amount you want to {userInput}");
-            string input = Console.ReadLine() ?? "";
-            if (input != null && decimal.TryParse(input, out number))
+            var input = Console.ReadLine() ?? "";
+            if (decimal.TryParse(input, out number))
             {
                 break;
             }
@@ -52,8 +59,8 @@ public class Program
         }
         return number;
     }
-    
-     public static string GetInputFromUser()
+
+    private static string GetInputFromUser()
     {
         Console.WriteLine($"What would you like to do?\n{Deposit} | {Withdraw} | {Statement} | {Exit}");
         var result = Console.ReadLine() ?? "";

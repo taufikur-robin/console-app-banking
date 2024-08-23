@@ -1,22 +1,21 @@
 namespace Banking;
 public class Transaction
 {
-    private readonly DateTime dateTime;
-    private readonly decimal amount;
-    private readonly string operation;
-    private readonly decimal balance;
-    public int id;
+    public DateTime DateTime { get; }
+    public decimal Amount { get; }
+    public string Operation { get; }
+    public decimal Balance { get; }
 
     public Transaction(DateTime dateTime, decimal amount, string operation, decimal balance)
     {
-        this.dateTime = dateTime;
-        this.amount = amount;
-        this.operation = operation;
-        this.balance = balance;
+        DateTime = dateTime;
+        Amount = amount;
+        Operation = operation;
+        Balance = balance;
     }
 
     public string GetStatementLine()
     {
-        return $"{id}. {dateTime}: {operation}: £{amount:F2}, New Balance: £{balance:F2}";
+        return $"{DateTime}: {Operation}: £{Amount:F2}, New Balance: £{Balance:F2}";
     }
 }
