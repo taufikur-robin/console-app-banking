@@ -5,20 +5,14 @@ namespace Banking;
 public class Account
 {
     private readonly BankingContext _context;
-    private AccountModel _accountModel;
+    private readonly AccountModel _accountModel;
     private readonly TransactionStore _transactionStore;
 
-    public Account(BankingContext context, TransactionStore transactionStore)
+    public Account(BankingContext context, TransactionStore transactionStore, AccountProvider accountProvider)
     {
         _context = context;
         _transactionStore = transactionStore;
-        
-        _accountModel = _context.Accounts.FirstOrDefault() ?? new AccountModel();
-        if (_accountModel.Id == 0)
-        {
-            _context.Accounts.Add(_accountModel);
-            _context.SaveChanges();
-        }
+        _accountModel = accountProvider.GetAccountModel();
     }
     
     /*public decimal Total => _accountModel.Balance;*/

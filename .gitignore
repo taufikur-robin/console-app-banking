@@ -2,6 +2,8 @@
 /Banking/obj
 /BankingTest/bin
 /BankingTest/obj
+/BankingWebApp/bin
+/BankingWebApp/obj
 .DS_Store
 .env
 .idea

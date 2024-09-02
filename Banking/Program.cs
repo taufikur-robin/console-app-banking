@@ -12,7 +12,8 @@ public abstract class Program
     {
         var context = new BankingContext();
         var transactionStore = new TransactionStore(context);
-        var account = new Account(context, transactionStore);
+        var accountProvider = new AccountProvider(context);
+        var account = new Account(context, transactionStore, accountProvider);
         
         Console.WriteLine($"Current Account Balance: £{account.GetCurrentBalance:F2}");
         
