@@ -1,0 +1,13 @@
+<h2>Current Balance: £@Model</h2>
+
+<form asp-action="Deposit" method="post">
+    <input type="number" step="1.00" name="amount" required />
+    <button type="submit">Deposit</button>
+</form>
+
+<form asp-action="Withdraw" method="post">
+    <input type="number" step="1.00" name="amount" required />
+    <button type="submit">Withdraw</button>
+</form>
+
+<a href="@Url.Action("Statement", "Account")">View Transaction History</a>
