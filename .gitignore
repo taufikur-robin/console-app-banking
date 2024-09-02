@@ -3,3 +3,5 @@
 /BankingTest/bin
 /BankingTest/obj
 .DS_Store
+.env
+.idea
