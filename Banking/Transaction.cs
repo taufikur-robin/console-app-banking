@@ -1,21 +1,25 @@
 namespace Banking;
+using System.ComponentModel.DataAnnotations.Schema;
 public class Transaction
 {
-    public DateTime DateTime { get; }
-    public decimal Amount { get; }
-    public string Operation { get; }
-    public decimal Balance { get; }
-
-    public Transaction(DateTime dateTime, decimal amount, string operation, decimal balance)
-    {
-        DateTime = dateTime;
-        Amount = amount;
-        Operation = operation;
-        Balance = balance;
-    }
+    public int Id { get; set; }
+    
+    public int AccountId { get; set; }
+    
+    public DateTime DateCreated { get; set; }
+    
+    public string? Operation  { get; set; }
+    
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal Amount { get; set; }
+    
+    [NotMapped]
+    public decimal Balance { get; set; }
+    
+    public Transaction() {}
 
     public string GetStatementLine()
     {
-        return $"{DateTime}: {Operation}: £{Amount:F2}, New Balance: £{Balance:F2}";
+        return $"{DateCreated}: {Operation}: £{Amount:F2}, New Balance: ${Balance:F2}";
     }
 }

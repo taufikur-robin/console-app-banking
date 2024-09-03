@@ -15,11 +15,17 @@ public class Account
         _accountModel = accountProvider.GetAccountModel();
     }
     
-    /*public decimal Total => _accountModel.Balance;*/
     public void DepositFunds(decimal amount) 
     {
         _accountModel.Balance += amount;
-        var transaction = new Transaction(DateTime.UtcNow, amount, "deposited", _accountModel.Balance);
+        var transaction = new Transaction
+        {
+            DateCreated = DateTime.Now,
+            Amount = amount,
+            Operation = "Deposited",
+            AccountId = _accountModel.Id,
+            Balance = _accountModel.Balance
+        };
         _transactionStore.AddTransaction(transaction, _accountModel.Id);
         _context.SaveChanges();
         Console.WriteLine(transaction.GetStatementLine());
@@ -33,7 +39,14 @@ public class Account
 
         else {
             _accountModel.Balance -= amount;
-            var transaction = new Transaction(DateTime.UtcNow, amount, "withdrew", _accountModel.Balance);
+            var transaction = new Transaction
+            {
+                DateCreated = DateTime.Now,
+                Amount = amount,
+                Operation = "Withdrew",
+                AccountId = _accountModel.Id,
+                Balance = _accountModel.Balance
+            };
             _transactionStore.AddTransaction(transaction, _accountModel.Id);
             _context.SaveChanges();
             Console.WriteLine(transaction.GetStatementLine());
@@ -46,7 +59,7 @@ public class Account
         var transactions = _transactionStore.Transactions.Where(t => t.AccountId == _accountModel.Id).ToList();
         foreach (var transaction in transactions)
         {
-            statement += $"{transaction.Id}. {transaction.DateCreated}: {transaction.Operation}: £{transaction.Amount:F2}, New Balance: £{_accountModel.Balance:F2}\n";
+            statement += $"{transaction.Id}. {transaction.DateCreated}: {transaction.Operation}: £{transaction.Amount:F2}\n";
         }
         statement += $"Current Balance: £{_accountModel.Balance:F2}";
         return statement;

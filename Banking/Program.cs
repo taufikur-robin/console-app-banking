@@ -66,5 +66,6 @@ public abstract class Program
         Console.WriteLine($"What would you like to do?\n{Deposit} | {Withdraw} | {Statement} | {Exit}");
         var result = Console.ReadLine() ?? "";
         return result.ToLower();
-    } 
+    }
+    
 }

@@ -5,7 +5,7 @@ namespace Banking.Data;
 public class BankingContext : DbContext
 {
     public DbSet<AccountModel> Accounts { get; set; } = null!;
-    public DbSet<TransactionModel> Transactions { get; set; } = null!;
+    public DbSet<Transaction> Transactions { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
