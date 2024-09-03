@@ -4,6 +4,8 @@
 /BankingTest/obj
 /BankingWebApp/bin
 /BankingWebApp/obj
+/BankingConsoleApp/bin
+/BankingConsoleApp/obj
 /BankingWebApp/wwwroot
 .DS_Store
 .env
