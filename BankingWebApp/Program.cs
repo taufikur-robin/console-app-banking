@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BankingContext>();
 builder.Services.AddScoped<TransactionStore>();
 builder.Services.AddScoped<Account>();
-builder.Services.AddScoped<AccountProvider>();
+builder.Services.AddScoped<AccountService>();
 
 var app = builder.Build();
 

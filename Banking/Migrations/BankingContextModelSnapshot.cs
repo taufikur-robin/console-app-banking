@@ -22,7 +22,7 @@ namespace Banking.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Banking.Models.AccountModel", b =>
+            modelBuilder.Entity("Banking.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

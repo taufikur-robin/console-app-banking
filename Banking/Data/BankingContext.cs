@@ -1,10 +1,9 @@
-using Banking.Models;
 using Microsoft.EntityFrameworkCore;
 namespace Banking.Data;
 
 public class BankingContext : DbContext
 {
-    public DbSet<AccountModel> Accounts { get; set; } = null!;
+    public DbSet<Account> Accounts { get; set; } = null!;
     public DbSet<Transaction> Transactions { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

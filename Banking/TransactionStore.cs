@@ -1,5 +1,4 @@
 using Banking.Data;
-using Banking.Models;
 
 namespace Banking;
 public class TransactionStore

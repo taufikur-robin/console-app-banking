@@ -12,10 +12,10 @@ public abstract class Program
     {
         var context = new BankingContext();
         var transactionStore = new TransactionStore(context);
-        var accountProvider = new AccountProvider(context);
-        var account = new Account(context, transactionStore, accountProvider);
+        var accountService = new AccountService(context, transactionStore);
+        var account = accountService.GetAccount();
         
-        Console.WriteLine($"Current Account Balance: £{account.GetCurrentBalance:F2}");
+        Console.WriteLine($"Current Account Balance: £{accountService.GetBalance:F2}");
         
         while (true) 
         {
@@ -25,16 +25,16 @@ public abstract class Program
                 var amount = GetAmountFromUser(userInput);
                 if (userInput == Deposit)
                 {
-                    account.DepositFunds(amount);
+                    accountService.DepositFunds(account, amount);
                 }
                 else
                 {
-                    account.WithdrawFunds(amount);
+                    accountService.WithdrawFunds(account, amount);
                 }
             } 
             else if (userInput == Statement)
             {
-                Console.WriteLine(account.GetStatement());
+                Console.WriteLine(accountService.GetStatement(account));
             }
             if (userInput == Exit)
             {
@@ -67,5 +67,4 @@ public abstract class Program
         var result = Console.ReadLine() ?? "";
         return result.ToLower();
     }
-    
 }

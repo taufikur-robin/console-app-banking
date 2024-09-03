@@ -5,36 +5,40 @@ namespace BankingWebApp.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly Account _account;
+    private readonly AccountService _accountService;
 
-    public AccountController(Account account)
+    public AccountController(AccountService accountService)
     {
-        _account = account;
+        _accountService = accountService;
     }
 
     public IActionResult Index()
     {
-        var balance = _account.GetCurrentBalance;
+        var account = _accountService.GetAccount();
+        var balance = _accountService.GetBalance(account);
         return View(balance);
     }
 
     [HttpPost]
     public IActionResult Deposit(decimal amount)
     {
-        _account.DepositFunds(amount);
+        var account = _accountService.GetAccount();
+        _accountService.DepositFunds(account, amount);
         return RedirectToAction("Index");
     }
 
     [HttpPost]
     public IActionResult Withdraw(decimal amount)
     {
-        _account.WithdrawFunds(amount);
+        var account = _accountService.GetAccount();
+        _accountService.WithdrawFunds(account, amount);
         return RedirectToAction("Index");
     }
 
     public IActionResult Statement()
     {
-        var statement = _account.GetStatement();
+        var account = _accountService.GetAccount();
+        var statement = _accountService.GetStatement(account);
         return View("Statement", statement);
     }
 }
