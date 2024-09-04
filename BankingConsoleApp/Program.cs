@@ -25,19 +25,29 @@ public abstract class Program
             if (userInput == Deposit || userInput == Withdraw)
             {
                 var amount = GetAmountFromUser(userInput);
+                var balance = accountService.GetBalance(account);
+                
                 if (userInput == Deposit)
                 {
                     accountService.DepositFunds(account, amount);
+                    Console.WriteLine(transactionStore.GetLastTransaction());
+                }
+                else if (amount > balance)
+                {
+                    Console.WriteLine("Insufficient funds");
                 }
                 else
                 {
                     accountService.WithdrawFunds(account, amount);
+                    Console.WriteLine(transactionStore.GetLastTransaction());
                 }
             } 
+            
             else if (userInput == Statement)
             {
                 Console.WriteLine(accountService.GetStatement(account));
             }
+            
             if (userInput == Exit)
             {
                 break;

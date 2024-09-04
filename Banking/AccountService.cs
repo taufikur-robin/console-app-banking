@@ -37,16 +37,12 @@ public class AccountService
         };
         _transactionStore.AddTransaction(transaction, account.Id);
         _context.SaveChanges();
-        Console.WriteLine(transaction.GetStatementLine());
     } 
 
     public void WithdrawFunds(Account account, decimal amount) 
     {
-        if (amount > account.Balance) {
-            Console.WriteLine("Insufficient Funds");
-        }
-
-        else {
+        if (HasSufficientFunds(account, amount))
+        {
             account.Balance -= amount;
             var transaction = new Transaction
             {
@@ -58,7 +54,6 @@ public class AccountService
             };
             _transactionStore.AddTransaction(transaction, account.Id);
             _context.SaveChanges();
-            Console.WriteLine(transaction.GetStatementLine());
         }
     }
 
@@ -77,5 +72,10 @@ public class AccountService
     public decimal GetBalance(Account account)
     {
         return account.Balance;
+    }
+
+    private bool HasSufficientFunds(Account account, decimal amount)
+    {
+        return account.Balance >= amount;
     }
 }

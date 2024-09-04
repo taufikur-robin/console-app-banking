@@ -17,9 +17,5 @@ public class Transaction
     public decimal Balance { get; set; }
     
     public Transaction() {}
-
-    public string GetStatementLine()
-    {
-        return $"{DateCreated}: {Operation}: £{Amount:F2}, New Balance: ${Balance:F2}";
-    }
+    
 }
