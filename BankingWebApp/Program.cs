@@ -1,11 +1,16 @@
 using Banking;
 using Banking.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<BankingContext>();
+builder.Services.AddDbContext<BankingContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 builder.Services.AddScoped<TransactionStore>();
 builder.Services.AddScoped<Account>();
 builder.Services.AddScoped<AccountService>();
@@ -22,6 +27,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+var assetsPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(assetsPath),
+    RequestPath = "/Assets"
+});
 
 app.UseRouting();
 
