@@ -20,18 +20,19 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public IActionResult Deposit(decimal amount)
+    public IActionResult HandleTransaction(decimal amount, string action)
     {
         var account = _accountService.GetAccount();
-        _accountService.DepositFunds(account, amount);
-        return RedirectToAction("Index");
-    }
 
-    [HttpPost]
-    public IActionResult Withdraw(decimal amount)
-    {
-        var account = _accountService.GetAccount();
-        _accountService.WithdrawFunds(account, amount);
+        if (action == "Deposit")
+        {
+            _accountService.DepositFunds(account, amount);
+        }
+        else if (action == "Withdraw")
+        {
+            _accountService.WithdrawFunds(account, amount);
+        }
+
         return RedirectToAction("Index");
     }
 

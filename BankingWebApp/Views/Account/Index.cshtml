@@ -3,13 +3,10 @@
 <div class="account-page-outer-wrapper">
     <div class="account-page-inner-wrapper">
         <h2 class="current-balance">Current Balance: £@Model.ToString()</h2>
-        <form asp-action="Deposit" method="post">
-            <input type="number" step="1.00" name="amount" required/>
-            <button type="submit">Deposit</button>
-        </form>
-        <form asp-action="Withdraw" method="post">
-            <input type="number" step="1.00" name="amount" required/>
-            <button type="submit">Withdraw</button>
+        <form method="post" asp-controller="Account" asp-action="HandleTransaction">
+            <input type="number" step="1.00" name="amount" required />
+            <button type="submit" name="action" value="Deposit">Deposit</button>
+            <button type="submit" name="action" value="Withdraw">Withdraw</button>
         </form>
         <a href="@Url.Action("Statement", "Account")">View Transaction History</a>
     </div>
