@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Banking;
+using BankingWebApp.Models;
 
 namespace BankingWebApp.Controllers;
 
@@ -16,24 +17,46 @@ public class AccountController : Controller
     {
         var account = _accountService.GetAccount();
         var balance = _accountService.GetBalance(account);
-        return View(balance);
+        var model = new TransactionViewModel
+        {
+            Balance = balance
+        };
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult HandleTransaction(decimal amount, string action)
+    public IActionResult HandleTransaction(TransactionViewModel model)
     {
         var account = _accountService.GetAccount();
-
-        if (action == "Deposit")
+        model.Balance = _accountService.GetBalance(account);
+        
+        if (!ModelState.IsValid)
         {
-            _accountService.DepositFunds(account, amount);
-        }
-        else if (action == "Withdraw")
-        {
-            _accountService.WithdrawFunds(account, amount);
+            return View("Index", model);
         }
 
-        return RedirectToAction("Index");
+        try
+        {
+            if (model.Action == "Deposit")
+            {
+                _accountService.DepositFunds(account, model.Amount);
+                model.SuccessMessage = $"Successfully deposited £{model.Amount:F2}.";
+            }
+            else if (model.Action == "Withdraw")
+            {
+                _accountService.WithdrawFunds(account, model.Amount);
+                model.SuccessMessage = $"Successfully withdrew £{model.Amount:F2}.";
+            }
+        }
+        catch (InvalidOperationException exception)
+        {
+            model.ErrorMessage = exception.Message;
+            return View("Index", model);
+        }
+        
+        model.Balance = _accountService.GetBalance(account);
+        
+        return View("Index", model);
     }
 
     public IActionResult Statement()

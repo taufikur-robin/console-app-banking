@@ -41,20 +41,22 @@ public class AccountService
 
     public void WithdrawFunds(Account account, decimal amount) 
     {
-        if (HasSufficientFunds(account, amount))
+        if (!HasSufficientFunds(account, amount))
         {
-            account.Balance -= amount;
-            var transaction = new Transaction
-            {
-                DateCreated = DateTime.Now,
-                Amount = amount,
-                Operation = "Withdrew",
-                AccountId = account.Id,
-                Balance = account.Balance
-            };
-            _transactionStore.AddTransaction(transaction, account.Id);
-            _context.SaveChanges();
+            throw new InvalidOperationException("Insufficient funds for the requested withdrawal.");
         }
+        
+        account.Balance -= amount;
+        var transaction = new Transaction
+        {
+            DateCreated = DateTime.Now,
+            Amount = amount,
+            Operation = "Withdrew",
+            AccountId = account.Id,
+            Balance = account.Balance
+        };
+        _transactionStore.AddTransaction(transaction, account.Id);
+        _context.SaveChanges();
     }
 
     public string GetStatement(Account account)
