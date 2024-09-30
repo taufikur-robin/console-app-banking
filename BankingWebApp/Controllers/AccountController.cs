@@ -1,68 +1,82 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Banking;
 using BankingWebApp.Models;
 
 namespace BankingWebApp.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly AccountService _accountService;
+    private readonly HttpClient _httpClient;
 
-    public AccountController(AccountService accountService)
+    public AccountController(IHttpClientFactory httpClientFactory)
     {
-        _accountService = accountService;
+        _httpClient = httpClientFactory.CreateClient("BankingApi");
     }
 
-    public IActionResult Index()
+    public async Task <IActionResult> Index()
     {
-        var account = _accountService.GetAccount();
-        var balance = _accountService.GetBalance(account);
-        var model = new TransactionViewModel
-        {
-            Balance = balance
-        };
+        var model = await InitializeTransactionViewModel();
+        model.SuccessMessage = TempData["SuccessMessage"] as string;
         return View(model);
     }
 
     [HttpPost]
-    public IActionResult HandleTransaction(TransactionViewModel model)
+    public async Task<IActionResult> HandleTransaction(TransactionViewModel model)
     {
-        var account = _accountService.GetAccount();
-        model.Balance = _accountService.GetBalance(account);
-        
         if (!ModelState.IsValid)
         {
-            return View("Index", model);
+            var initializedModel = await InitializeTransactionViewModel();
+            initializedModel.Amount = model.Amount;
+            initializedModel.Action = model.Action;
+            return View("Index", initializedModel);
         }
 
-        try
-        {
-            if (model.Action == "Deposit")
-            {
-                _accountService.DepositFunds(account, model.Amount);
-                model.SuccessMessage = $"Successfully deposited £{model.Amount:F2}.";
-            }
-            else if (model.Action == "Withdraw")
-            {
-                _accountService.WithdrawFunds(account, model.Amount);
-                model.SuccessMessage = $"Successfully withdrew £{model.Amount:F2}.";
-            }
-        }
-        catch (InvalidOperationException exception)
-        {
-            model.ErrorMessage = exception.Message;
-            return View("Index", model);
-        }
+        var apiUrl = model.Action == "Deposit" ? "/api/account/deposit" : "/api/account/withdraw";
+        var content = new StringContent(JsonSerializer.Serialize(model.Amount), Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync(apiUrl, content);
         
-        model.Balance = _accountService.GetBalance(account);
+        var initializedModelWithBalance = await InitializeTransactionViewModel();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            initializedModelWithBalance.ErrorMessage = await response.Content.ReadAsStringAsync();
+            initializedModelWithBalance.Amount = model.Amount;
+            initializedModelWithBalance.Action = model.Action;
+            return View("Index", initializedModelWithBalance);
+        }
+       
+        var balanceResponse = await _httpClient.GetAsync("/api/account/balance");
+        balanceResponse.EnsureSuccessStatusCode();
+        var updatedBalance = await balanceResponse.Content.ReadAsStringAsync();
+        model.Balance = decimal.Parse(updatedBalance);
         
-        return View("Index", model);
+        TempData["SuccessMessage"] = $"{model.Action} of £{model.Amount:F2} successful.";
+        return RedirectToAction("Index");
+        
+        
     }
-
-    public IActionResult Statement()
+    
+    public async Task <IActionResult> Statement()
     {
-        var account = _accountService.GetAccount();
-        var statement = _accountService.GetStatement(account);
+        var response = await _httpClient.GetAsync("/api/account/statement");
+        response.EnsureSuccessStatusCode();
+        
+        var statement = await response.Content.ReadAsStringAsync();
+    
         return View("Statement", statement);
+    }
+    
+    private async Task<TransactionViewModel> InitializeTransactionViewModel()
+    {
+        var response = await _httpClient.GetAsync("/api/account/balance");
+        response.EnsureSuccessStatusCode();
+
+        var balance = await response.Content.ReadAsStringAsync();
+        return new TransactionViewModel
+        {
+            Balance = decimal.Parse(balance),
+        };
     }
 }

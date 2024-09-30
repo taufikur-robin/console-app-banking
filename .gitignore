@@ -6,6 +6,8 @@
 /BankingWebApp/obj
 /BankingConsoleApp/bin
 /BankingConsoleApp/obj
+/BankingApi/bin
+/BankingApi/obj
 /BankingWebApp/wwwroot
 .DS_Store
 .env

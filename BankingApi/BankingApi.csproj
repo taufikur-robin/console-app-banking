@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Account\Index.cshtml" />
-      <AdditionalFiles Include="Views\Account\Statement.cshtml" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Banking\Banking.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,4 @@
-﻿using Banking;
-using Banking.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -26,11 +23,11 @@ public class Program
     
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<BankingContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddHttpClient("BankingApi", client =>
+        {
+            client.BaseAddress = new Uri(configuration["BankingApiBaseUrl"]);
+        });
         
-        services.AddTransient<TransactionStore>();
-        services.AddTransient<AccountService>();
         services.AddTransient<App>();
     }
 }

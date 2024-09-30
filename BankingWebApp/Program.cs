@@ -1,19 +1,15 @@
-using Banking;
-using Banking.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<BankingContext>(options =>
+
+
+builder.Services.AddHttpClient("BankingApi", client =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    client.BaseAddress = new Uri(builder.Configuration["BankingApiBaseUrl"] ?? throw new InvalidOperationException());
 });
-builder.Services.AddScoped<TransactionStore>();
-builder.Services.AddScoped<Account>();
-builder.Services.AddScoped<AccountService>();
 
 var app = builder.Build();
 
