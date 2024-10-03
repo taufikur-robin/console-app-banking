@@ -1,18 +1,23 @@
 using BankingWebApp.Services;
 using BankingWebApp.Services.Interfaces;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<ApiConfiguration>(builder.Configuration.GetSection("ApiConfiguration"));
+builder.Services.AddSingleton<IApiConfiguration>(sp => sp.GetRequiredService<IOptions<ApiConfiguration>>().Value);
+
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddHttpClient("BankingApi", client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["BankingApiBaseUrl"] ?? throw new InvalidOperationException());
+    var apiConfig = builder.Configuration.GetSection("ApiConfiguration").Get<ApiConfiguration>();
+    client.BaseAddress = new Uri(apiConfig.BaseUrl ?? throw new InvalidOperationException("BaseUrl is not configured"));
 });
-builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 

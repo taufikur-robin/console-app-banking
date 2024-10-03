@@ -7,26 +7,18 @@ namespace BankingWebApp.Services;
 public class AccountService : IAccountService
 {
 	private readonly HttpClient _httpClient;
-	private readonly IConfiguration _configuration;
-	private readonly string? _balanceUrl;
-	private readonly string? _depositUrl;
-	private readonly string? _withdrawUrl;
-	private readonly string? _statementUrl;
+	private readonly IApiConfiguration _apiConfiguration;
 
-	public AccountService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+	public AccountService(IHttpClientFactory httpClientFactory, IApiConfiguration apiConfiguration)
 	{
 		_httpClient = httpClientFactory.CreateClient("BankingApi");
-		_configuration = configuration;
+		_apiConfiguration = apiConfiguration;
 		
-		_balanceUrl = _configuration["ApiUrls:Balance"];
-		_depositUrl = _configuration["ApiUrls:Deposit"];
-		_withdrawUrl = _configuration["ApiUrls:Withdraw"];
-		_statementUrl = _configuration["ApiUrls:Statement"];
 	}
 
 	public async Task<decimal> GetBalanceAsync()
 	{
-		var response = await _httpClient.GetAsync(_balanceUrl);
+		var response = await _httpClient.GetAsync(_apiConfiguration.BalanceUrl);
 		response.EnsureSuccessStatusCode();
 
 		var balanceString = await response.Content.ReadAsStringAsync();
@@ -35,7 +27,7 @@ public class AccountService : IAccountService
 	
 	public async Task<string> HandleTransactionAsync(decimal amount, string action)
 	{
-		var apiUrl = action == "Deposit" ? _depositUrl : _withdrawUrl;
+		var apiUrl = action == "Deposit" ? _apiConfiguration.DepositUrl : _apiConfiguration.WithdrawUrl;
 		var content = new StringContent(JsonSerializer.Serialize(amount), Encoding.UTF8, "application/json");
 
 		var response = await _httpClient.PostAsync(apiUrl, content);
@@ -49,7 +41,7 @@ public class AccountService : IAccountService
 	
 	public async Task<string> GetStatementAsync()
 	{
-		var response = await _httpClient.GetAsync(_statementUrl);
+		var response = await _httpClient.GetAsync(_apiConfiguration.StatementUrl);
 		response.EnsureSuccessStatusCode();
 
 		return await response.Content.ReadAsStringAsync();
