@@ -1,3 +1,5 @@
+using BankingWebApp.Services;
+using BankingWebApp.Services.Interfaces;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddHttpClient("BankingApi", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["BankingApiBaseUrl"] ?? throw new InvalidOperationException());
 });
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 
